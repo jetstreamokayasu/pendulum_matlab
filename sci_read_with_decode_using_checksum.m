@@ -1,11 +1,11 @@
 function sh2pc = sci_read_with_decode_using_checksum(serial)
     readSize = 0;
-    lastwarn('');  % readã®è­¦å‘Šã‚’ã‚­ãƒ£ãƒƒãƒã™ã‚‹ãŸã‚ã«lastwarnã‚’ãƒªã‚»ãƒƒãƒˆ
+    lastwarn('');  %read‚ÌŒx‚ğƒLƒƒƒbƒ`‚·‚é‚½‚ß‚Élastwarn‚ğƒŠƒZƒbƒg
     while 1
         readBuf(readSize + 1) = read(serial, 1, 'uint8');
         [~, warnId] = lastwarn;
         if string(warnId) == "serialport:serialport:ReadWarning"
-            disp("ã‚¿ã‚¤ãƒ ã‚¢ã‚¦ãƒˆ");
+            disp("ƒ^ƒCƒ€ƒAƒEƒg");
             return
         end
         readSize = readSize + 1;
@@ -16,14 +16,14 @@ function sh2pc = sci_read_with_decode_using_checksum(serial)
         
     end
     
-    %% ãƒã‚§ãƒƒã‚¯ã‚µãƒ ã«ã‚ˆã‚‹èª¤ã‚Šæ¤œçŸ¥
+    %% ƒ`ƒFƒbƒNƒTƒ€‚É‚æ‚éŒë‚èŒŸ’m
     
     if (bitand(uint8(mod(sum(readBuf(1:end-2)), 256)), 0x3f) + 0x30) ~= uint8(readBuf(end-1))
-        disp('ãƒ“ãƒƒãƒˆèª¤ã‚ŠãŒæ¤œçŸ¥ã•ã‚Œã¾ã—ãŸ');
+        disp('ƒrƒbƒgŒë‚è‚ªŒŸ’m‚³‚ê‚Ü‚µ‚½');
         return;
     end
     
-    %% ãƒ‡ãƒ¼ã‚¿ã®ãƒ‡ã‚³ãƒ¼ãƒ‰
+   %% ƒf[ƒ^‚ÌƒfƒR[ƒh
     buf = readBuf(1:4);
     buf = int64(uint8(buf) - 0x30);
     sh2pc.TMStamp = bitor(bitshift(buf(1), 6 * 3), bitor(bitor(bitshift(buf(2), 6 * 2), bitshift(buf(3), 6 * 1)), buf(4)));
